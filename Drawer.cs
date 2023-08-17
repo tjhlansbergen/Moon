@@ -59,8 +59,8 @@ public class Drawer : IDisposable
 
         // follow cursor
         if (_state.Cursor.X < ViewPort.Left) ViewPort.Left -= ViewPort.Left - _state.Cursor.X;
-        if (_state.Cursor.X > ViewPort.Right) ViewPort.Left += _state.Cursor.X - ViewPort.Right;
+        if (_state.Cursor.X >= ViewPort.Right) ViewPort.Left += 1 + _state.Cursor.X - ViewPort.Right;
         if (_state.Cursor.Y < ViewPort.Top) ViewPort.Top -= ViewPort.Top - _state.Cursor.Y;
-        if (_state.Cursor.Y > ViewPort.Bottom) ViewPort.Top += _state.Cursor.Y - ViewPort.Bottom;
+        if (_state.Cursor.Y >= ViewPort.Bottom) ViewPort.Top += 1 + _state.Cursor.Y - ViewPort.Bottom;
     }
 }

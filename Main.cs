@@ -19,18 +19,31 @@ public class Main
     {
         // test
         _state.AddTile(new Tile { DisplayChar = 'e', DisplayColor = ConsoleColor.Green }, new Point(10, 10));
-        bool exit;
+
 
         do
         {
             _drawer.Draw();
 
-            Console.WriteLine($"({_state.Cursor.X}:{_state.Cursor.Y})");
-            Console.Write("> ");
+            WriteStatus();
 
-            exit = _interpreter.Read(Console.ReadLine());
+            _interpreter.Read(Console.ReadLine());
 
-        } while (!exit);
+        } while (!_state.Quit);
 
+    }
+
+    private void WriteStatus()
+    {
+        Console.Write($"({_state.Cursor.X}:{_state.Cursor.Y}) ");
+
+        var color = Console.ForegroundColor;
+        if (_state.Status.Item2) Console.ForegroundColor = ConsoleColor.Green;
+        else Console.ForegroundColor = ConsoleColor.Red;
+        
+        Console.WriteLine(_state.Status.Item1);
+        Console.ForegroundColor = color;
+        
+        Console.Write("> ");
     }
 }
