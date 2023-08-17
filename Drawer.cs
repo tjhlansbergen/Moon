@@ -10,6 +10,8 @@ public class Drawer : IDisposable
     private readonly ConsoleColor _userBackground;
     private readonly bool _userCursorVisible;
 
+    public Rect ViewPort { get; private set; } = new(0,0,0,0);
+
     public Drawer(State state)
     {
         _state = state;
@@ -29,14 +31,16 @@ public class Drawer : IDisposable
 
     public void Draw()
     {
-        var bounds = new Point(Console.WindowWidth, Console.WindowHeight);
+        SyncViewPort();
         Console.Clear();
 
-        for (int y = 0; y < bounds.Y - 1; y++)
+        // for each row
+        for (int y = ViewPort.Top; y < ViewPort.Height; y++)
         {
-            for (int x = 0; x < bounds.X; x++)
+            // for each column
+            for (int x = ViewPort.Left; x < ViewPort.Width; x++)
             {
-                if (x == 20 && y == 20) Console.BackgroundColor = Constants.CursorColor;
+                if (x == _state.Cursor.X && y == _state.Cursor.Y) Console.BackgroundColor = Constants.CursorColor;
 
                 var tile = _state.TileOrDefault(new Point(x, y));
                 Console.ForegroundColor = tile?.DisplayColor ?? _userForeground;
@@ -45,5 +49,18 @@ public class Drawer : IDisposable
                 Console.BackgroundColor = _userBackground;
             }
         }
+    }
+
+    private void SyncViewPort()
+    {
+        // sync with console
+        ViewPort.Width = Console.WindowWidth;
+        ViewPort.Height = Console.WindowHeight - 2;
+
+        // follow cursor
+        if (_state.Cursor.X < ViewPort.Left) ViewPort.Left -= 1 + ViewPort.Left - _state.Cursor.X;
+        if (_state.Cursor.X > ViewPort.Right) ViewPort.Left += 1 + _state.Cursor.X - ViewPort.Right;
+        if (_state.Cursor.Y < ViewPort.Top) ViewPort.Top -= 1 + ViewPort.Top - _state.Cursor.Y;
+        if (_state.Cursor.Y > ViewPort.Bottom) ViewPort.Top += 1 + _state.Cursor.Y - ViewPort.Bottom;
     }
 }

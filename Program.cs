@@ -9,6 +9,7 @@ class Program
         new ServiceCollection()
             .AddSingleton<State>()
             .AddSingleton<Drawer>()
+            .AddSingleton<Interpreter>()
             .AddSingleton<Main>()
             .BuildServiceProvider()
             .GetRequiredService<Main>()
