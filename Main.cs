@@ -35,7 +35,7 @@ public class Main
 
     private void WriteStatus()
     {
-        Console.Write($"({_state.Cursor.X}:{_state.Cursor.Y}) ");
+        Console.Write($"({_state.Cursor.X}:{_state.Cursor.Y})  ");
 
         var color = Console.ForegroundColor;
         if (_state.Status.Item2) Console.ForegroundColor = ConsoleColor.Green;

@@ -5,7 +5,7 @@ namespace Moon;
 public class State
 {
     public Dictionary<Point, Tile> Map { get; private set; } = new Dictionary<Point, Tile>();
-    public Point Cursor { get; set; } = new(5,5);
+    public Point Cursor { get; set; } = new(0,0);
     public bool Quit { get; set; } = false;
     public Tuple<string, bool> Status { get; private set; } = new("v", true);
 
