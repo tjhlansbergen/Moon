@@ -1,13 +1,38 @@
-using System;
+using System.Text.Json;
+
 
 namespace Moon;
 
 public class State
 {
-    public Dictionary<Point, Tile> Map { get; private set; } = new Dictionary<Point, Tile>();
+    private Dictionary<Point, Tile> _map = new(); 
+    public List<KeyValuePair<Point, Tile>> Map 
+    { 
+        get { return _map.ToList(); }
+        set { _map = value.ToDictionary(x => x.Key, x => x.Value); }
+    }
+
     public Point Cursor { get; set; } = new(0,0);
     public bool Quit { get; set; } = false;
-    public Tuple<string, bool> Status { get; private set; } = new("v", true);
+    public Tuple<string, bool> Status { get; set; } = new("v", true);
+
+    public static State LoadOrNew()
+    {
+        return File.Exists(Constants.SaveFile) ? JsonSerializer.Deserialize<State>(File.ReadAllText(Constants.SaveFile)) ?? New() : New();
+    }
+
+    public void Store()
+    {
+        var json = JsonSerializer.Serialize(this);
+        File.WriteAllText(Constants.SaveFile, json);
+    }
+
+    private static State New()
+    {
+        var state = new State();
+        state.AddTile(new Tile { DisplayChar = 'e', DisplayColor = ConsoleColor.Green }, new Point(10, 10));
+        return state;
+    }
 
     public void SetStatus(string message, bool ok)
     {
@@ -21,21 +46,21 @@ public class State
 
     public void AddSelectedTile(Tile tile)
     {
-        Map.Add(Cursor, tile);
+        _map.Add(Cursor, tile);
     }
 
     public void AddTile(Tile tile, Point point)
     {
-        Map.Add(point, tile);
+        _map.Add(point, tile);
     }
 
     public Tile? SelectedTileOrDefault()
     {
-        return Map.ContainsKey(Cursor) ? Map[Cursor] : null; 
+        return _map.ContainsKey(Cursor) ? _map[Cursor] : null; 
     }
 
     public Tile? TileOrDefault(Point point)
     {
-        return Map.ContainsKey(point) ? Map[point] : null; 
+        return _map.ContainsKey(point) ? _map[point] : null; 
     }
 }

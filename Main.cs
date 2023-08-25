@@ -17,20 +17,17 @@ public class Main
 
     public void Run()
     {
-        // test
-        _state.AddTile(new Tile { DisplayChar = 'e', DisplayColor = ConsoleColor.Green }, new Point(10, 10));
-
-
         do
         {
             _drawer.Draw();
 
             WriteStatus();
 
+            _state.Store();
+
             _interpreter.Read(Console.ReadLine());
 
         } while (!_state.Quit);
-
     }
 
     private void WriteStatus()

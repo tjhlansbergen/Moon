@@ -7,7 +7,7 @@ class Program
     public static void Main(string[] args)
     {
         new ServiceCollection()
-            .AddSingleton<State>()
+            .AddSingleton(s => State.LoadOrNew())
             .AddSingleton<Drawer>()
             .AddSingleton<Interpreter>()
             .AddSingleton<Main>()
