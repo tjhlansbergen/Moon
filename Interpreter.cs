@@ -17,15 +17,28 @@ public class Interpreter
         _state.ResetStatus();
 
         if (string.IsNullOrWhiteSpace(input)) return;
-        input = input.ToLowerInvariant();
+        input = input.ToLowerInvariant().Trim();
 
         var command = input.Split(' ')[0];
-        var parameters = input.Split(' ').Skip(1).ToArray();
+        var parameters = input.Split(' ').Skip(1).Select(p => p.Trim()).ToArray();
 
         if (Exit(command)) return;
         if (Move(command, parameters)) return;
+        if (Build(command, parameters)) return;
 
         Warn($"Unknown command: {command}");
+    }
+
+    private bool Build(string command, string[] p)
+    {
+        if (command != "new") return false;
+
+        if (_state.SelectedTileOrDefault() != null) return Warn($"New failed, tile {_state.Cursor} is in use");
+
+        // TODO switch
+
+        _state.AddSelectedTile(Tile.New(TileType.ROAD));
+        return true;
     }
 
     private bool Move(string command, string[] p)
@@ -47,16 +60,16 @@ public class Interpreter
         switch (command)
         {
             case "up":
-                _state.Cursor.Y -= distance;
+                _state.Cursor = _state.Cursor.MoveVertical(-distance);
                 break;
             case "down":
-                _state.Cursor.Y += distance;
+                _state.Cursor = _state.Cursor.MoveVertical(distance);
                 break;
             case "left":
-                _state.Cursor.X -= distance;
+                _state.Cursor = _state.Cursor.MoveHorizontal(-distance);
                 break;
             case "right":
-                _state.Cursor.X += distance;
+                _state.Cursor = _state.Cursor.MoveHorizontal(distance);
                 break;
         }
 

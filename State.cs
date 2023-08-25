@@ -19,9 +19,19 @@ public class State
         Status = new("v", true);
     }
 
+    public void AddSelectedTile(Tile tile)
+    {
+        Map.Add(Cursor, tile);
+    }
+
     public void AddTile(Tile tile, Point point)
     {
         Map.Add(point, tile);
+    }
+
+    public Tile? SelectedTileOrDefault()
+    {
+        return Map.ContainsKey(Cursor) ? Map[Cursor] : null; 
     }
 
     public Tile? TileOrDefault(Point point)

@@ -17,16 +17,16 @@ public class Drawer : IDisposable
         _state = state;
         _userForeground = Console.ForegroundColor;
         _userBackground = Console.BackgroundColor;
-        //_userCursorVisible = Console.CursorVisible;
+        _userCursorVisible = Console.CursorVisible;
 
-        //Console.CursorVisible = false;
+        Console.CursorVisible = false;
     }
 
     public void Dispose()
     {
         Console.ForegroundColor = _userForeground;
         Console.BackgroundColor = _userBackground;
-        //Console.CursorVisible = _userCursorVisible;
+        Console.CursorVisible = _userCursorVisible;
     }
 
     public void Draw()
@@ -35,10 +35,10 @@ public class Drawer : IDisposable
         Console.Clear();
 
         // for each row
-        for (int y = ViewPort.Top; y < ViewPort.Bottom; y++)
+        for (int y = ViewPort.Y; y < ViewPort.Bottom; y++)
         {
             // for each column
-            for (int x = ViewPort.Left; x < ViewPort.Right; x++)
+            for (int x = ViewPort.X; x < ViewPort.Right; x++)
             {
                 if (x == _state.Cursor.X && y == _state.Cursor.Y) Console.BackgroundColor = Constants.CursorColor;
 
@@ -54,13 +54,12 @@ public class Drawer : IDisposable
     private void SyncViewPort()
     {
         // sync with console
-        ViewPort.Width = Console.WindowWidth;
-        ViewPort.Height = Console.WindowHeight - 2;
+        ViewPort = ViewPort.Resize(Console.WindowWidth, Console.WindowHeight - 2);
 
         // follow cursor
-        if (_state.Cursor.X < ViewPort.Left) ViewPort.Left -= ViewPort.Left - _state.Cursor.X;
-        if (_state.Cursor.X >= ViewPort.Right) ViewPort.Left += 1 + _state.Cursor.X - ViewPort.Right;
-        if (_state.Cursor.Y < ViewPort.Top) ViewPort.Top -= ViewPort.Top - _state.Cursor.Y;
-        if (_state.Cursor.Y >= ViewPort.Bottom) ViewPort.Top += 1 + _state.Cursor.Y - ViewPort.Bottom;
+        if (_state.Cursor.X < ViewPort.X) ViewPort = ViewPort.MoveHorizontal(_state.Cursor.X - ViewPort.X);
+        if (_state.Cursor.X >= ViewPort.Right) ViewPort = ViewPort.MoveHorizontal(1 + _state.Cursor.X - ViewPort.Right);
+        if (_state.Cursor.Y < ViewPort.Y) ViewPort = ViewPort.MoveVertical(_state.Cursor.Y - ViewPort.Y);
+        if (_state.Cursor.Y >= ViewPort.Bottom) ViewPort = ViewPort.MoveVertical(1 + _state.Cursor.Y - ViewPort.Bottom);
     }
 }
