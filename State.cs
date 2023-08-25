@@ -5,8 +5,9 @@ namespace Moon;
 
 public class State
 {
+    // Liast<KVP> to allow json serialization
     private Dictionary<Point, Tile> _map = new(); 
-    public List<KeyValuePair<Point, Tile>> Map 
+    public List<KeyValuePair<Point, Tile>> Map  
     { 
         get { return _map.ToList(); }
         set { _map = value.ToDictionary(x => x.Key, x => x.Value); }
