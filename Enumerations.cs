@@ -1,6 +1,6 @@
 namespace Moon;
 
-public enum TileType
+public enum New
 {
-    ROAD,
+    road,
 }

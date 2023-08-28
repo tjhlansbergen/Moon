@@ -1,6 +1,3 @@
-using System;
-using System.ComponentModel;
-
 namespace Moon;
 
 public class Interpreter
@@ -19,14 +16,37 @@ public class Interpreter
         if (string.IsNullOrWhiteSpace(input)) return;
         input = input.ToLowerInvariant().Trim();
 
-        var command = input.Split(' ')[0];
-        var parameters = input.Split(' ').Skip(1).Select(p => p.Trim()).ToArray();
+        var commands = input.Split(';', StringSplitOptions.RemoveEmptyEntries);
+        var iterations = 1;
 
-        if (Exit(command)) return;
-        if (Move(command, parameters)) return;
-        if (Build(command, parameters)) return;
+        if (commands.Length > 1 &&
+            commands.Last().Trim().StartsWith("x") &&
+            int.TryParse(commands.Last().Split('x')[1], out var i))
+        {
+            commands = commands.Take(commands.Length - 1).ToArray();
+            iterations = i;
+        }
 
-        Warn($"Unknown command: {command}");
+        Process(commands, iterations);
+    }
+
+    private void Process(string[] commands, int iterations)
+    {
+        for (int i = 0; i < iterations; i++)
+        {
+            foreach (var command in commands)
+            {
+                var input = command.Trim().Split(' ')[0];
+                var parameters = command.Trim().Split(' ').Skip(1).Select(p => p.Trim().ToLowerInvariant()).ToArray();
+
+                if (Exit(input)) continue;
+                if (Move(input, parameters)) continue;
+                if (Build(input, parameters)) continue;
+
+                Warn($"Unknown command: {input}");
+                break;
+            }
+        }
     }
 
     private bool Build(string command, string[] p)
@@ -34,10 +54,9 @@ public class Interpreter
         if (command != "new") return false;
 
         if (_state.SelectedTileOrDefault() != null) return Warn($"New failed, tile {_state.Cursor} is in use");
+        if (p.Length != 1 || !Enum.TryParse<New>(p[0], out var t)) return Warn($"New failed, not sure what to build");
 
-        // TODO switch
-
-        _state.AddSelectedTile(Tile.New(TileType.ROAD));
+        _state.AddSelectedTile(Tile.New(t));
         return true;
     }
 
