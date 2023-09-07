@@ -13,6 +13,8 @@ public struct Point
         Y = y;
     }
 
+    public override readonly string ToString() => $"({X}, {Y})";
+
     public readonly Point MoveHorizontal(int by) => new(X + by, Y);
     public readonly Point MoveVertical(int by) => new (X, Y + by);
 }

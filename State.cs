@@ -50,6 +50,11 @@ public class State
         _map.Add(Cursor, tile);
     }
 
+    public void ClearSelectedTile()
+    {
+        _map.Remove(Cursor);
+    }
+
     public void AddTile(Tile tile, Point point)
     {
         _map.Add(point, tile);

@@ -40,9 +40,10 @@ public class Interpreter
                 var parameters = command.Trim().Split(' ').Skip(1).Select(p => p.Trim().ToLowerInvariant()).ToArray();
 
                 if (Exit(input)) continue;
+                if (Clear(input)) continue;
                 if (Move(input, parameters)) continue;
                 if (Build(input, parameters)) continue;
-
+                
                 Warn($"Unknown command: {input}");
                 break;
             }
@@ -57,6 +58,15 @@ public class Interpreter
         if (p.Length != 1 || !Enum.TryParse<New>(p[0], out var t)) return Warn($"New failed, not sure what to build");
 
         _state.AddSelectedTile(Tile.New(t));
+        return true;
+    }
+
+    private bool Clear(string command)
+    {
+        if (command != "clear") return false;
+        if (_state.SelectedTileOrDefault() == null) return Warn($"Clear failed, nothing to clear at {_state.Cursor}");
+
+        _state.ClearSelectedTile();
         return true;
     }
 
