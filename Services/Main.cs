@@ -4,12 +4,14 @@ namespace Moon;
 
 public class Main
 {
+    private Time _time;
     private State _state;
     private Drawer _drawer;
     private Interpreter _interpreter;
 
-    public Main(State state, Drawer drawer, Interpreter interpreter)
+    public Main(Time time, State state, Drawer drawer, Interpreter interpreter)
     {
+        _time = time;
         _state = state;
         _drawer = drawer;
         _interpreter = interpreter;
@@ -17,30 +19,17 @@ public class Main
 
     public void Run()
     {
+        _time.Start();
+
         do
         {
             _drawer.Draw();
-
-            WriteStatus();
-
-            _state.Store();
-
+            _state.Store();     // note we only store after the user 'does something', not on each tick
             _interpreter.Read(Console.ReadLine());
 
         } while (!_state.Quit);
-    }
 
-    private void WriteStatus()
-    {
-        Console.Write($"({_state.Cursor.X}:{_state.Cursor.Y})  ");
-
-        var color = Console.ForegroundColor;
-        if (_state.Status.Item2) Console.ForegroundColor = ConsoleColor.Green;
-        else Console.ForegroundColor = ConsoleColor.Red;
-        
-        Console.WriteLine(_state.Status.Item1);
-        Console.ForegroundColor = color;
-        
-        Console.Write("> ");
+        _time.Stop();
+        _state.Store();
     }
 }

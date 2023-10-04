@@ -49,6 +49,22 @@ public class Drawer : IDisposable
                 Console.BackgroundColor = _userBackground;
             }
         }
+
+        WriteStatus();
+    }
+
+    private void WriteStatus()
+    {
+        Console.Write($"d{_state.Date} ({_state.Cursor.X}:{_state.Cursor.Y})  ");
+
+        var color = Console.ForegroundColor;
+        if (_state.Status.Item2) Console.ForegroundColor = ConsoleColor.Green;
+        else Console.ForegroundColor = ConsoleColor.Red;
+        
+        Console.WriteLine(_state.Status.Item1);
+        Console.ForegroundColor = color;
+        
+        Console.Write("> ");
     }
 
     private void SyncViewPort()

@@ -14,7 +14,7 @@
     to build a tile of type <type> on the currently selected tile
     Example: `new road`
 
-# Upcoming commands:
+# Proposed commands:
 - info
     to display info on the currently selected tile
 

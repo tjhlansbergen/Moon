@@ -10,6 +10,7 @@ class Program
             .AddSingleton(s => State.LoadOrNew())
             .AddSingleton<Drawer>()
             .AddSingleton<Interpreter>()
+            .AddSingleton<Time>()
             .AddSingleton<Main>()
             .BuildServiceProvider()
             .GetRequiredService<Main>()

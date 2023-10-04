@@ -22,7 +22,7 @@ public class State
     public bool Quit { get; set; } = false;
 
     [JsonIgnore]
-    public Tuple<string, bool> Status { get; set; } = new("v", true);
+    public Tuple<string, bool> Status { get; private set; } = new("v", true);
 
     public static State LoadOrNew()
     {
