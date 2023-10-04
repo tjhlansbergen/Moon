@@ -17,7 +17,7 @@ public class Drawer : IDisposable
         _state = state;
         _userForeground = Console.ForegroundColor;
         _userBackground = Console.BackgroundColor;
-        _userCursorVisible = Console.CursorVisible;
+        //_userCursorVisible = Console.CursorVisible;
 
         Console.CursorVisible = false;
     }

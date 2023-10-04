@@ -1,11 +1,12 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 
 namespace Moon;
 
 public class State
 {
-    // Liast<KVP> to allow json serialization
+    // List<KVP> to allow json serialization
     private Dictionary<Point, Tile> _map = new(); 
     public List<KeyValuePair<Point, Tile>> Map  
     { 
@@ -14,7 +15,10 @@ public class State
     }
 
     public Point Cursor { get; set; } = new(0,0);
+    
     public bool Quit { get; set; } = false;
+
+    [JsonIgnore]
     public Tuple<string, bool> Status { get; set; } = new("v", true);
 
     public static State LoadOrNew()
