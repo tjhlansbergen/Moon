@@ -16,6 +16,9 @@ public class State
 
     public Point Cursor { get; set; } = new(0,0);
     
+    public long Date { get; set; } = 0;
+
+    [JsonIgnore]
     public bool Quit { get; set; } = false;
 
     [JsonIgnore]

@@ -8,7 +8,7 @@ public class Drawer : IDisposable
 
     private readonly ConsoleColor _userForeground;
     private readonly ConsoleColor _userBackground;
-    private readonly bool _userCursorVisible;
+    //private readonly bool _userCursorVisible;
 
     public Rect ViewPort { get; private set; } = new(0,0,0,0);
 
@@ -19,14 +19,14 @@ public class Drawer : IDisposable
         _userBackground = Console.BackgroundColor;
         //_userCursorVisible = Console.CursorVisible;
 
-        Console.CursorVisible = false;
+        //Console.CursorVisible = false;
     }
 
     public void Dispose()
     {
         Console.ForegroundColor = _userForeground;
         Console.BackgroundColor = _userBackground;
-        Console.CursorVisible = _userCursorVisible;
+        //Console.CursorVisible = _userCursorVisible;
     }
 
     public void Draw()
